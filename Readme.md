@@ -3,14 +3,14 @@
 ## 安装使用方法
 ### 1、将Plugin目录下所有文件放入HDCX目录即可
 ### 2、修改order_engine.ini，并申请token,填入可用的token
-'''
+···
 token=HDCX_xxxxxx
-'''
+···
 其中:xxxxxx即为token，可以申请试用token;
 也可以修改HTTP接口绑定本地端口号：
-'''
+···
 http_port=12964
-'''
+···
 端口冲突或者开启多个汇点客户端需要绑定不同的端口号，则修改此配置。
 ### 3、启动IsaacLaucher.exe
 启动后，HDCX.EXE会被自动调起，不需要用户手动启动HDCX.EXE会!
@@ -18,56 +18,56 @@ http_port=12964
 
 ## 接口调用说明
 接口全部以本地http服务的方式调用，原则上支持所有语言, 根服务地址：
-'''
+···
 http://localhost:12964
-'''
+···
 12964就是配置的绑定端口号。
 
 ### 1、下单接口
-'''
+···
 /placeorder?symbol=10001617&price=0.0001&volume=1&type=B&isopen=o
-'''
+···
 参数说明：
-'''
+···
 #### symbol:合约编号
 #### price:委托价格
 #### volume:委托数量，（张）
 #### type:委托方式，B为买，S为卖
 #### isopen:是否开仓，o为开仓，c为平仓
-'''
+···
 
 返回说明：
 返回值为json格式，正确的情况：
-'''
+···
 {
    "encoding" : "gb2312",
    "orderNumber" : 17901,	// 用来追踪委托的整型数值，撤单的时候用到, 当status为ERROR的时候忽略
    "status" : "OK"			// 状态，正确都是"OK",错误都是"ERROR"
 }
-'''
+···
 
 错误的情况：
-'''
+···
 {
    "encoding" : "gb2312",
    "info" : "",				// 错误详情
    "status" : "ERROR"		// 状态，正确都是"OK",错误都是"ERROR"
 }
-'''
+···
 
 ### 2、撤单接口
-'''
+···
 /cancelorder?ordernumber=1
-'''
+···
 参数说明：
 ordernumber:为下单时返回的整型数值
 
 ### 3、委托列表
-'''
+···
 /orderlist
-'''
+···
 返回json格式，如：
-'''
+···
 {
    "encoding" : "gb2312",
    "list" : [									// 多个委托，所以数组类型
@@ -88,15 +88,15 @@ ordernumber:为下单时返回的整型数值
    ],
    "status" : "OK"
 }
-'''
+···
 注意：当有委托时，status为OK，否则都为ERROR.
 
 ### 4、持仓查询
-'''
+···
 /positions
-'''
+···
 返回也是json数据格式，如：
-'''
+···
 {
    "encoding" : "gb2312",
    "list" : [									// 多个持仓，所以数组类型
@@ -109,5 +109,5 @@ ordernumber:为下单时返回的整型数值
    ],
    "status" : "OK"
 }
-'''
+···
 status为ERROR时，list无效。
