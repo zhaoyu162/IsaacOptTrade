@@ -30,7 +30,7 @@ http://localhost:12964
 
 ### 1、下单接口
 ```
-/placeorder?symbol=10001617&price=0.0001&volume=1&type=B&isopen=o
+/placeorder?symbol=10001617&price=0.0001&volume=1&type=B&isopen=o&pricetype=0
 ```
 参数说明：
 ```
@@ -39,6 +39,7 @@ http://localhost:12964
  volume:委托数量，（张）
  type:委托方式，B为买，S为卖
  isopen:是否开仓，o为开仓，c为平仓
+ pricetype:可选参数，0 限价委托，o 市价剩余转限GFD, p 市价IOC剩余撤单， r 市价FOK全成或撤
 ```
 
 返回说明：
@@ -47,7 +48,7 @@ http://localhost:12964
 {
    "encoding" : "gb2312",
    "orderNumber" : 17901,		// 用来追踪委托的整型数值，撤单的时候用到, 当status为ERROR的时候忽略
-   "status" : "OK"				// 状态，正确都是"OK",错误都是"ERROR"
+   "status" : "OK"				     // 状态，正确都是"OK",错误都是"ERROR"
 }
 ```
 
@@ -75,20 +76,20 @@ ordernumber:为下单时返回的整型数值
 ```
 {
    "encoding" : "gb2312",
-   "list" : [										// 多个委托，所以数组类型
+   "list" : [										              // 多个委托，所以数组类型
       {
-         "dealtPrice" : 0.0,						// 成交价格
-         "dealtVol" : 0,							// 成交数量
-         "marketAndType" : "SHQQ-A",				// 市场
+         "dealtPrice" : 0.0,					   	// 成交价格
+         "dealtVol" : 0,							      // 成交数量
+         "marketAndType" : "SHQQ-A",	// 市场
          "orderDate" : 20190129,					// 下单日期
-         "orderId" : "1072000049",					// 委托编号
+         "orderId" : "1072000049",			// 委托编号
          "orderNumber" : 17446,						// 委托ID
          "orderPrice" : 0.0001,						// 委托价格
-         "orderVol" : 1,							// 委托数量
-         "status" : "已撤",							// 委托状态，（已撤，已报，未报，已成等）
+         "orderVol" : 1,							      // 委托数量
+         "status" : "已撤",							    // 委托状态，（已撤，已报，未报，已成等）
          "symbol" : "10001675",						// 合约编号
          "symbolName" : "50ETF购2月2600",			// 名称
-         "time" : "10:28:37"						// 下单时间
+         "time" : "10:28:37"						   // 下单时间
       }
    ],
    "status" : "OK"
@@ -104,12 +105,12 @@ ordernumber:为下单时返回的整型数值
 ```
 {
    "encoding" : "gb2312",
-   "list" : [								// 多个持仓，所以数组类型
+   "list" : [								         // 多个持仓，所以数组类型
       {
          "buysell" : "0",					// 头寸方向，"0"多头，”1“空头
-         "symbol" : "10001675",				// 合约编号
+         "symbol" : "10001675",	// 合约编号
          "symbolName" : "50ETF购2月2600",	// 名称
-         "volume" : 1						// 所持合约张数
+         "volume" : 1						   // 所持合约张数
       }
    ],
    "status" : "OK"
