@@ -122,3 +122,8 @@ status为ERROR时，list无效。
 /getquote?market=SHQQ-A&code=10001536
 ```
 返回为json数据格式。
+### 6、获取当日成交
+```
+/trades
+```
+返回为json数据格式。
