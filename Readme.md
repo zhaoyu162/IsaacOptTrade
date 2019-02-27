@@ -127,3 +127,25 @@ status为ERROR时，list无效。
 /trades
 ```
 返回为json数据格式。
+### 7、获取账户数据
+```
+/account
+```
+返回为json数据格式,如：
+```
+{
+   "amount1" : "",                               // 未知
+   "amount2" : "",                               // 未知
+   "amount3" : "",                               // 未知
+   "cashAsset" : "34238.81",                     // 现金资产
+   "encoding" : "gb2312",
+   "freeCapital" : "34238.81",                   // 可取资金
+   "freeMargin" : "34238.81",                    // 可用保证金
+   "initialAmount" : "34238.81",                 // 期初资产
+   "profit" : "",                                // 盈亏
+   "status" : "OK",
+   "totalAsset" : "34238.81",                    // 总资产
+   "totalMarketVal" : "0",                       // 总市值
+   "usedMargin" : "0.00"                         // 已用保证金
+}
+```
