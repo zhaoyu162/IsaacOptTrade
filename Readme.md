@@ -1,5 +1,5 @@
 # 以撒期权程序化交易接口
-本软件是HDCX(汇点交易客户端)增强系统，需要将必需文件放入HDCX目录!接口依赖汇点交易客户端，客户端需登录才能正常使用下单/撤单/持仓/查询等功能接口。
+本软件是HDCX(汇点交易客户端)增强系统，需要将必需文件放入hdcf目录!接口依赖汇点交易客户端，客户端需登录才能正常使用下单/撤单/持仓/查询等功能接口。
 ## 安装使用方法
 ### 1、将Plugin目录下所有文件放入HDCX目录即可
 ### 2、修改order_engine.ini，并申请token,填入可用的token
@@ -48,7 +48,9 @@ http://localhost:12964
 {
    "encoding" : "gb2312",
    "orderNumber" : 17901,     // 用来追踪委托的整型数值，撤单的时候用到, 当status为ERROR的时候忽略
-   "status" : "OK"            // 状态，正确都是"OK",错误都是"ERROR"
+   "status" : "OK"            // 状态
+   "orderId": 123             // 委托编号
+   "info": "Wait Result Timeout" // 可选项，表示等待下单结果超时，但未必没有成功，需要调orderlist或orderError接口比对。
 }
 ```
 
@@ -57,7 +59,7 @@ http://localhost:12964
 {
    "encoding" : "gb2312",
    "info" : "",               // 错误详情
-   "status" : "ERROR"         // 状态，正确都是"OK",错误都是"ERROR"
+   "status" : "ERROR"         // 状态
 }
 ```
 
@@ -147,5 +149,27 @@ status为ERROR时，list无效。
    "totalAsset" : "34238.81",                    // 总资产
    "totalMarketVal" : "0",                       // 总市值
    "usedMargin" : "0.00"                         // 已用保证金
+}
+```
+### 8、获取下单错误信息
+```
+/orderError?orderNumber=996
+```
+orderNumber即PlaceOrder的返回值，当下单失败的时候，本接口返回对应的错误信息，否则返回orderId.
+下单失败时，返回的JSON数据格式如下：
+```
+{
+   "encoding" : "gb2312",
+   "status":"OK",
+   "info":"账户余额不足"， // 错误信息
+   "errCode":1            // 错误码
+}
+```
+下单成功时，返回的JSON如下：
+```
+{
+   "encoding" : "gb2312",
+   "status":"OK",
+   "orderId":123          // 委托编号
 }
 ```
