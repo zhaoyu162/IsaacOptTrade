@@ -1,7 +1,7 @@
 # 以撒期权程序化交易接口
 本软件是HDCX(汇点交易客户端)增强系统，需要将必需文件放入hdcf目录!接口依赖汇点交易客户端，客户端需登录才能正常使用下单/撤单/持仓/查询等功能接口。
 ## 安装使用方法
-### 1、将Plugin目录下所有文件放入HDCX目录即可
+### 1、将Plugin目录下所有文件放入hdcf目录即可
 ### 2、修改order_engine.ini，并申请token,填入可用的token
 ```
 token=YYY_xxxxxx
@@ -121,7 +121,7 @@ ordernumber:为下单时返回的整型数值
 status为ERROR时，list无效。
 ### 5、获取行情
 ```
-/getquote?market=SHQQ-A&code=10001536
+/quote?market=SHQQ-A&code=10001536
 ```
 返回为json数据格式。
 ### 6、获取当日成交
