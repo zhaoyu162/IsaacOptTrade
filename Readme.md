@@ -68,8 +68,29 @@ http://localhost:12964
 /cancelorder?ordernumber=1
 ```
 参数说明：
-ordernumber:为下单时返回的整型数值
-
+ordernumber:为下单时返回的整型数值。
+撤单正常返回如下：
+```
+{
+   "encoding" : "gb2312",
+   "orderId" : "           1279",
+   "orderNumber" : 80,
+   "orderState" : "",
+   "orderStateInfo" : "正在撤单",         // 此状态后可以继续查询最终的撤单结果
+   "status" : "OK"
+}
+```
+撤单失败返回如下：
+```
+{
+   "encoding" : "gb2312",
+   "errCode" : 1,                         // 错误码
+   "info" : "该委托已全部撤单,不能再撤单",  // 错误描述
+   "orderId" : "           1030",         // 委托ID
+   "orderNumber" : 79,
+   "status" : "ERROR"
+}
+```
 ### 3、委托列表
 ```
 /orderlist
