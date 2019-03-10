@@ -213,6 +213,10 @@ status为ERROR时，list无效。
    "totalAsset" : "34238.81",                    // 总资产
    "totalMarketVal" : "0",                       // 总市值
    "usedMargin" : "0.00"                         // 已用保证金
+    "shCreditLeft" : 0.0,                        // 上海可用限额
+    "shCreditLimit" : 180000,                    // 上海限额
+    "szCreditLeft" : 0.0,                        // 深圳用限额
+    "szCreditLimit" : 180000,                    // 深圳限额
 }
 ```
 ### 8、获取下单错误信息
