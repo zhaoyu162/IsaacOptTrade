@@ -1,7 +1,7 @@
 # 以撒期权程序化交易接口
-本软件是HDCX(汇点交易客户端)增强系统，需要将必需文件放入HDCX目录!接口依赖汇点交易客户端，客户端需登录才能正常使用下单/撤单/持仓/查询等功能接口。
+本软件是HDCX(汇点交易客户端)增强系统，需要将必需文件放入hdcf目录!接口依赖汇点交易客户端，客户端需登录才能正常使用下单/撤单/持仓/查询等功能接口。
 ## 安装使用方法
-### 1、将Plugin目录下所有文件放入HDCX目录即可
+### 1、将Plugin目录下所有文件放入hdcf目录即可
 ### 2、修改order_engine.ini，并申请token,填入可用的token
 ```
 token=YYY_xxxxxx
@@ -48,7 +48,9 @@ http://localhost:12964
 {
    "encoding" : "gb2312",
    "orderNumber" : 17901,     // 用来追踪委托的整型数值，撤单的时候用到, 当status为ERROR的时候忽略
-   "status" : "OK"            // 状态，正确都是"OK",错误都是"ERROR"
+   "status" : "OK"            // 状态
+   "orderId": 123             // 委托编号
+   "info": "Wait Result Timeout" // 可选项，表示等待下单结果超时，但未必没有成功，需要调orderlist或orderError接口比对。
 }
 ```
 
@@ -57,7 +59,7 @@ http://localhost:12964
 {
    "encoding" : "gb2312",
    "info" : "",               // 错误详情
-   "status" : "ERROR"         // 状态，正确都是"OK",错误都是"ERROR"
+   "status" : "ERROR"         // 状态
 }
 ```
 
@@ -66,8 +68,29 @@ http://localhost:12964
 /cancelorder?ordernumber=1
 ```
 参数说明：
-ordernumber:为下单时返回的整型数值
-
+ordernumber:为下单时返回的整型数值。
+撤单正常返回如下：
+```
+{
+   "encoding" : "gb2312",
+   "orderId" : "           1279",
+   "orderNumber" : 80,
+   "orderState" : "",
+   "orderStateInfo" : "正在撤单",         // 此状态后可以继续查询最终的撤单结果
+   "status" : "OK"
+}
+```
+撤单失败返回如下：
+```
+{
+   "encoding" : "gb2312",
+   "errCode" : 1,                         // 错误码
+   "info" : "该委托已全部撤单,不能再撤单",  // 错误描述
+   "orderId" : "           1030",         // 委托ID
+   "orderNumber" : 79,
+   "status" : "ERROR"
+}
+```
 ### 3、委托列表
 ```
 /orderlist
@@ -119,14 +142,57 @@ ordernumber:为下单时返回的整型数值
 status为ERROR时，list无效。
 ### 5、获取行情
 ```
-/getquote?market=SHQQ-A&code=10001536
+/quote?market=SHQQ-A&code=10001536
 ```
-返回为json数据格式。
+返回为json数据格式,如下：
+```
+{
+   "askPrices" : [
+      0.045400000000000003,
+      0.045499999999999999,
+      0.045600000000000002,
+      0.045699999999999998,
+      0.0458,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+   ],
+   "askVols" : [ 4, 35, 16, 31, 68, 0, 0, 0, 0, 0 ],
+   "bidPrices" : [
+      0.0453,
+      0.045199999999999997,
+      0.045100000000000001,
+      0.044999999999999998,
+      0.044900000000000002,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+   ],
+   "bidVols" : [ 333, 442, 303, 7, 139, 0, 0, 0, 0, 0 ],
+   "currVol" : 1215,
+   "dropLimit" : 9.9999997473787516e-05,
+   "encoding" : "gb2312",
+   "high" : 0.048500000000000001,
+   "lastClose" : 0.039,
+   "lastSettlement" : 0.039,
+   "latestPrice" : 0.0453,
+   "low" : 0.037600000000000001,
+   "open" : 0.040000000000000001,
+   "posVols" : 279064.0,
+   "riseLimit" : 0.30199998617172241,
+   "status" : "OK",
+   "volume" : 295903.0
+}
+```
 ### 6、获取当日成交
 ```
 /trades
 ```
-返回为json数据格式。
+返回为json数据格式
 ### 7、获取账户数据
 ```
 /account
@@ -147,5 +213,31 @@ status为ERROR时，list无效。
    "totalAsset" : "34238.81",                    // 总资产
    "totalMarketVal" : "0",                       // 总市值
    "usedMargin" : "0.00"                         // 已用保证金
+    "shCreditLeft" : 0.0,                        // 上海可用限额
+    "shCreditLimit" : 180000,                    // 上海限额
+    "szCreditLeft" : 0.0,                        // 深圳用限额
+    "szCreditLimit" : 180000,                    // 深圳限额
+}
+```
+### 8、获取下单错误信息
+```
+/orderError?orderNumber=996
+```
+orderNumber即PlaceOrder的返回值，当下单失败的时候，本接口返回对应的错误信息，否则返回orderId.
+下单失败时，返回的JSON数据格式如下：
+```
+{
+   "encoding" : "gb2312",
+   "status":"OK",
+   "info":"账户余额不足"， // 错误信息
+   "errCode":1            // 错误码
+}
+```
+下单成功时，返回的JSON如下：
+```
+{
+   "encoding" : "gb2312",
+   "status":"OK",
+   "orderId":123          // 委托编号
 }
 ```
