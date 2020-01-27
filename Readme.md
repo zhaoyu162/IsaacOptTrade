@@ -17,6 +17,12 @@ http_port=12964
 ```
 exe=HDCX.exe // 也可能修改成其他如main.exe
 ```
+```
+param=SHELL // 2019.7月以后的汇点版本
+```
+```
+check_interval=1000 // 可选项，5.2.1.4汇点版本，设置检查数据是否更新的间隔，单位ms，不设置默认1000。
+```
 ### 3、启动IsaacLaucher.exe
 启动后，HDCX.EXE会被自动调起，不需要用户手动启动HDCX.EXE！
 ### 4、自行输入用户名密码登录交易
@@ -30,7 +36,7 @@ http://localhost:12964
 
 ### 1、下单接口
 ```
-/placeorder?symbol=10001617&price=0.0001&volume=1&type=B&isopen=o&pricetype=0
+/placeorder?symbol=10001617&price=0.0001&volume=1&type=B&isopen=o&pricetype=0&market=SHQQ-A
 ```
 参数说明：
 ```
@@ -40,6 +46,7 @@ http://localhost:12964
  type:委托方式，B为买，S为卖
  isopen:是否开仓，o为开仓，c为平仓
  pricetype:可选参数，0 限价委托，o 市价剩余转限GFD, p 市价IOC剩余撤单， r 市价FOK全成或撤
+ market:上海：SHQQ-A,深圳:SZQQ-A
 ```
 
 返回说明：
@@ -49,8 +56,6 @@ http://localhost:12964
    "encoding" : "gb2312",
    "orderNumber" : 17901,     // 用来追踪委托的整型数值，撤单的时候用到, 当status为ERROR的时候忽略
    "status" : "OK"            // 状态
-   "orderId": 123             // 委托编号
-   "info": "Wait Result Timeout" // 可选项，表示等待下单结果超时，但未必没有成功，需要调orderlist或orderError接口比对。
 }
 ```
 
@@ -65,10 +70,10 @@ http://localhost:12964
 
 ### 2、撤单接口
 ```
-/cancelorder?ordernumber=1
+/cancelorder?orderid=123
 ```
 参数说明：
-ordernumber:为下单时返回的整型数值。
+orderid:委托编号。
 撤单正常返回如下：
 ```
 {
@@ -221,9 +226,9 @@ status为ERROR时，list无效。
 ```
 ### 8、获取下单错误信息
 ```
-/orderError?orderNumber=996
+/orderError?orderNumber=996 // For 5.2.1.4 and for older versions 4.x
 ```
-orderNumber即PlaceOrder的返回值，当下单失败的时候，本接口返回对应的错误信息，否则返回orderId.
+orderNumber即PlaceOrder的返回值，当下单失败的时候，本接口返回对应的错误信息，若正常下单，status
 下单失败时，返回的JSON数据格式如下：
 ```
 {
@@ -238,6 +243,7 @@ orderNumber即PlaceOrder的返回值，当下单失败的时候，本接口返�
 {
    "encoding" : "gb2312",
    "status":"OK",
-   "orderId":123          // 委托编号
+   "errorCode":0,   // 5.2.1.4
+   "info":"NoError" // 5.2.1.4
 }
 ```
